@@ -1,20 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
+    <title>图片转文字 - OCR工具</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>To-Do List</h1>
-        <div class="input-container">
-            <input type="text" id="task-input" placeholder="Add a new task...">
-            <button id="add-task-btn">Add</button>
+        <div class="header">
+            <h1>📷 图片转文字</h1>
+            <p class="subtitle">上传图片，自动识别其中的文字内容</p>
         </div>
-        <ul id="task-list"></ul>
+
+        <div class="upload-area" id="upload-area">
+            <div class="upload-content">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p class="upload-text">点击或拖拽图片到此处</p>
+                <p class="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                <input type="file" id="file-input" accept="image/*" hidden>
+            </div>
+        </div>
+
+        <div class="preview-section" id="preview-section" style="display: none;">
+            <div class="preview-container">
+                <div class="image-preview">
+                    <h3>图片预览</h3>
+                    <img id="preview-image" alt="预览图片">
+                    <button class="btn btn-secondary" id="change-image-btn">更换图片</button>
+                </div>
+                <div class="result-container">
+                    <div class="result-header">
+                        <h3>识别结果</h3>
+                        <button class="btn btn-primary" id="recognize-btn">
+                            <span class="btn-text">开始识别</span>
+                            <span class="btn-loader" style="display: none;"></span>
+                        </button>
+                    </div>
+                    <div class="result-content">
+                        <textarea id="result-text" placeholder="识别结果将显示在这里..." readonly></textarea>
+                        <div class="result-actions">
+                            <button class="btn btn-copy" id="copy-btn">复制文字</button>
+                            <button class="btn btn-download" id="download-btn">下载为文本</button>
+                            <button class="btn btn-clear" id="clear-btn">清空</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p class="loading-text">正在识别中，请稍候...</p>
+                <p class="loading-progress" id="loading-progress"></p>
+            </div>
+        </div>
     </div>
+
+    <!-- Tesseract.js 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
