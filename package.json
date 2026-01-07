@@ -1,0 +1,17 @@
+{
+  "name": "image-to-text-ocr",
+  "version": "1.0.0",
+  "description": "图片转文字 OCR 工具",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["ocr", "image-to-text", "tesseract"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+

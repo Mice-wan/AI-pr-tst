@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片转文字 - OCR工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📷 图片转文字工具</h1>
+            <p>上传图片，自动识别其中的文字内容</p>
+        </header>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📤</div>
+                <p class="upload-text">点击或拖拽图片到这里</p>
+                <p class="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+        </div>
+
+        <div class="preview-section" id="previewSection" style="display: none;">
+            <div class="image-preview">
+                <h3>图片预览</h3>
+                <img id="previewImage" alt="预览图片">
+            </div>
+        </div>
+
+        <div class="control-section" id="controlSection" style="display: none;">
+            <button id="recognizeBtn" class="btn btn-primary">
+                <span class="btn-text">开始识别</span>
+                <span class="btn-loading" style="display: none;">识别中...</span>
+            </button>
+            <button id="clearBtn" class="btn btn-secondary">清除</button>
+        </div>
+
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">准备中...</p>
+        </div>
+
+        <div class="result-section" id="resultSection" style="display: none;">
+            <h3>识别结果</h3>
+            <div class="result-content">
+                <textarea id="resultText" readonly></textarea>
+                <button id="copyBtn" class="btn btn-copy">📋 复制文字</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js" 
+            onerror="loadTesseractFallback()"></script>
+    <script>
+        // 备用 CDN 加载函数
+        function loadTesseractFallback() {
+            console.warn('主 CDN 加载失败，尝试备用 CDN...');
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js';
+            script.onerror = function() {
+                console.error('所有 CDN 加载失败');
+                alert('OCR 库加载失败，请检查网络连接后刷新页面重试。\n\n如果问题持续，可能是网络或 CDN 访问问题。');
+            };
+            script.onload = function() {
+                console.log('备用 CDN 加载成功');
+                // 重新初始化脚本
+                if (typeof initApp === 'function') {
+                    initApp();
+                }
+            };
+            document.head.appendChild(script);
+        }
+        
+        // 检查 Tesseract.js 是否加载成功
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof Tesseract === 'undefined') {
+                    console.error('Tesseract.js 加载失败');
+                    // 尝试加载备用 CDN
+                    loadTesseractFallback();
+                } else {
+                    console.log('Tesseract.js 加载成功');
+                    if (Tesseract.version) {
+                        console.log('版本:', Tesseract.version);
+                    }
+                }
+            }, 1000); // 等待 1 秒确保脚本加载完成
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
+
